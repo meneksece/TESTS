@@ -1,8 +1,5 @@
 - name: generate SSH key
-  hosts: 127.0.0.1
-  connection: local
   vars:
-    user: vio
     ssh_key_filename: id_rsa_{{ user }}
   vars_prompt:
     - name: "ssh_passphrase"

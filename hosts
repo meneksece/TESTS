@@ -2,3 +2,8 @@
 kub-master ansible_host=centos-s-1vcpu-512mb-10gb-fra1-master
 kub-worker1 ansible_host=centos-s-1vcpu-512mb-10gb-fra1-worker-01
 kub-worker2 ansible_host=centos-s-1vcpu-512mb-10gb-fra1-worker-02
+
+
+[jumpserver]
+ansible-server ansible_host=ubuntu-s-1vcpu-512mb-10gb-sfo3-01
+

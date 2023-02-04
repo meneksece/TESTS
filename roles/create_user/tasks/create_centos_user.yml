@@ -1,0 +1,7 @@
+- name: Create a remote sudo user for CentOS 
+  ansible.builtin.user:
+    name: "{{ user }}"
+    password: "{{ password }}"
+    groups:
+      - wheel
+    state: present

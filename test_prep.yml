@@ -1,0 +1,11 @@
+- name: test_prep calisiyor
+  hosts: all
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+  vars:
+    - user: vio
+    - password: vio
+  roles:
+          #- role: '/home/menek/.ansible/TESTS/roles/create_user/'
+    - roles/create_user

@@ -1,0 +1,13 @@
+- name: Create a remote sudo user for CentOS 
+  import_tasks: create_centos_user.yml
+  #when: ansible_facts['os_family']|lower == 'centos'
+  when: ansible_facts['distribution'] == "CentOS"
+
+- name: Create a remote sudo user for Ubuntu
+  import_tasks: create_ubuntu_user.yml
+  #when:  ansible_facts['os_family']|lower == 'ubuntu'
+  when: ansible_facts['distribution'] == "Ubuntu"
+
+- name: Create a ssh key pair
+  import_tasks: generate_ssh_key.yml
+  when: ansible_facts['distribution'] == "Ubuntu"
