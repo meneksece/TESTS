@@ -1,0 +1,28 @@
+- name: Create user on a linux server
+  hosts: kub-servers
+  become: yes
+  gather_facts: false
+  vars:
+    - user: vio
+    - password: vio
+  tasks:
+      - name: Create a login user
+        ansible.builtin.user:
+          name: "{{ user }}"
+          password: "{{ password }}"
+          groups:
+            - wheel
+          state: present
+
+      - name: Create .ssh directory
+        file:
+          path: /home/{{ user }}/.ssh/
+          state: directory
+      - name: create empty file
+        file:
+          path: "/home/{{ user }}/.ssh/authorized_keys"
+          state: touch
+      - name: put pubkey
+        lineinfile:
+          path: "/home/<username>/.ssh/authorized_keys"
+          line: "{{ pubkey }}"

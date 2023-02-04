@@ -1,0 +1,13 @@
+- name: Create user on a linux server
+  hosts: kub-servers
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: user example present
+      ansible.builtin.user:
+        name: vio
+        password: "{{ 'passwd' | password_hash('sha512', 'mysecretsalt') }}"
+        groups:
+          - wheel
+          - adm
+        state: "present"
