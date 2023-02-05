@@ -6,6 +6,9 @@
   vars:
     - user: vio
     - password: vio
+  vars_prompt:
+    - name: "ssh_passphrase"
+      prompt: "Enter the passphrase for the SSH key"
   roles:
           #- role: '/home/menek/.ansible/TESTS/roles/create_user/'
     - roles/create_user

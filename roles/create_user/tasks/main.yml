@@ -10,4 +10,4 @@
 
 - name: Create a ssh key pair
   import_tasks: generate_ssh_key.yml
-  when: ansible_facts['distribution'] == "Ubuntu"
+  when: inventory_hostname in groups['jumpserver']
