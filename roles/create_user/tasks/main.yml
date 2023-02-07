@@ -10,4 +10,8 @@
 
 - name: Create a ssh key pair
   import_tasks: generate_ssh_key.yml
-  when: inventory_hostname in groups['jumpserver']
+  #when: inventory_hostname in groups['jumpserver']
+
+- name: Distribute public key
+  import_tasks: distribute_ssh_key.yml
+  #when: inventory_hostname in groups['jumpserver']

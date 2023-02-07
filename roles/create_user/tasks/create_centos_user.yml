@@ -2,6 +2,12 @@
   ansible.builtin.user:
     name: "{{ user }}"
     password: "{{ password }}"
+    shell: /bin/bash
+    #uid: 1000
     groups:
       - wheel
     state: present
+    createhome: yes
+    home: /home/{{ user }}
+    state: present
+    #    when: inventory_hostname in groups['kub-servers']['kub-master']

@@ -1,1 +1,27 @@
----
+- name: Create .ssh directory
+  file:
+    path: /home/{{ user }}/.ssh/
+    state: directory
+- name: create empty file
+  file:
+    path: "/home/{{ user }}/.ssh/authorized_keys"
+    state: touch
+
+- name: Set authorized key taken from file
+  authorized_key:
+    user: vio
+    state: present
+    #    name: putkey
+    key: "{{ lookup('file', '/home/{{ user }}/.ssh/id_rsa.pub') }}"
+  register: key
+
+- name: Messages
+  debug:
+    var: key["key"].split()[1]
+ 
+    #- name: put pubkey
+    # lineinfile:
+    #    path: "/home/{{ user }}/.ssh/authorized_keys"
+    #    line: "{{ key }}"
+
+    #ansible localhost -m authorized_key -a "user=menek key='{{ lookup('file', '/root/.ssh/id_rsa.pub') }}' state=present" -u root -k

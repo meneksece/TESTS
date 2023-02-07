@@ -2,7 +2,8 @@
   ansible.builtin.user:
     name: "{{ user }}"
     comment: "{{ password }}"
-    uid: 1077
+    shell: /bin/bash
+    #uid: 1000
     groups:
       - sudo
     createhome: yes
