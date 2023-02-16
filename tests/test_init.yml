@@ -37,6 +37,13 @@
         src: /etc/kubernetes/admin.conf
         dest: $HOME/.kube/config
       when:  ansible_facts['hostname'] == "centos-s-1vcpu-512mb-10gb-fra1-Master"
+
+    - name: Change kubeconfig file permission
+      file:
+        path: $HOME/.kube/config
+        owner: "{{ ansible_effective_user_id }}"
+        group: "{{ ansible_effective_group_id }}"
+      when:  ansible_facts['hostname'] == "centos-s-1vcpu-512mb-10gb-fra1-Master"
  
 
     - name: copy custom calico settings from jumpserver and run it on master node

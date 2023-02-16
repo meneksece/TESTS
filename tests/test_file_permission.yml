@@ -1,0 +1,13 @@
+- name: test yum install
+  hosts: kub-servers[0]
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+  vars:
+    - k8s_version: "1.22.2"                                # Kubernetes version to be installed, kubernetes-cni-1.2.0-0.x86_64 is dependent and is installed with them automaticaly
+  tasks:
+    - name: Change kubeconfig file permission
+      file:
+        path: $HOME/.kube/config
+        owner: "{{ ansible_effective_user_id }}"
+        group: "{{ ansible_effective_group_id }}"
