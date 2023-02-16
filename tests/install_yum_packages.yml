@@ -1,0 +1,12 @@
+- name: test yum install
+  hosts: kub-servers
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+  vars:
+    - k8s_version: "1.22.2"                                # Kubernetes version to be installed, kubernetes-cni-1.2.0-0.x86_64 is dependent and is installed with them automaticaly
+  tasks:
+  - name: Install kubernetes packages
+    yum:
+      name: [kubelet-1.22.2,kubeadm-1.22.2,kubectl-1.22.2]
+      disable_excludes: kubernetes

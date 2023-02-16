@@ -17,6 +17,7 @@
     src: kernel_modules.conf.j2
     dest: /etc/modules-load.d/k8s_kernel_modules.conf
 
+
 - name: Modify sysctl entries
   ansible.posix.sysctl:
     name: '{{ item.key }}'

@@ -1,0 +1,21 @@
+#We now want to initialize the machine that will run the control plane components which includes etcd (the cluster database) and the API Server.
+---
+- name: Pull container images
+  shell: |
+    kubeadm config images pull
+    kubeadm init --apiserver-advertise-address 10.114.0.2 --pod-network-cidr=172.16.0.0/16
+  args:
+    chdir: $HOME
+    creates: cluster_initialized.txt
+
+- name: create .kube directory
+  become_user: menek
+  file:
+    path: $HOME/.kube
+    state: directory
+    mode: 0755
+
+- name: copies admin.conf to user's kube config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: $HOME/.kube/config

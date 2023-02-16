@@ -1,4 +1,4 @@
-- name: Create a remote sudo user for Ubuntu
+- name: Create a remote sudo user ["{{ user }}"] for Ubuntu
   ansible.builtin.user:
     name: "{{ user }}"
     comment: "{{ password }}"

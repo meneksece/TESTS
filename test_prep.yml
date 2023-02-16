@@ -4,11 +4,12 @@
   become_method: sudo
   gather_facts: yes
   vars:
-    - user: vio
-    - password: vio
+    - user: menek
+    - password: menek
   vars_prompt:
     - name: "ssh_passphrase"
       prompt: "Enter the passphrase for the SSH key"
   roles:
           #- role: '/home/menek/.ansible/TESTS/roles/create_user/'
-    - roles/create_user
+          #- roles/create_user
+    - roles/test_bootstrap

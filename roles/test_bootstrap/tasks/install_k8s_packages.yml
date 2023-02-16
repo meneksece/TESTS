@@ -4,9 +4,15 @@
     src: 'kubernetes.repo.j2'
     dest: /etc/yum.repos.d/kubernetes.repo
 
-- name: Install kubernetes packages
-  yum:
-    name: [kubelet,kubeadm,kubectl]
+    #- name: Remove existing kubernetes packages
+    #  yum:
+    #    name: [kubelet,kubeadm,kubectl]
+    #    state: absent
+    #    disable_excludes: kubernetes
+
+- name: Install specific version kubernetes packages
+  yum:         
+    name: [kubelet-1.22.2,kubeadm-1.22.2,kubectl-1.22.2]
     disable_excludes: kubernetes
 
 - name: Enable kubelet service

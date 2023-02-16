@@ -1,13 +1,13 @@
-- name: Create .ssh directory
+- name: Create .ssh directory --> ["/home/{{ user }}/.ssh/"]
   file:
     path: /home/{{ user }}/.ssh/
     state: directory
-- name: create empty file
+- name: create empty file for authorized_keys --> ["/home/{{ user }}/.ssh/authorized_keys"]
   file:
     path: "/home/{{ user }}/.ssh/authorized_keys"
     state: touch
 
-- name: Set authorized key taken from file
+- name: Put authorized key (id_rsa.pub) taken from jumpserver 
   authorized_key:
     user: vio
     state: present
@@ -15,7 +15,7 @@
     key: "{{ lookup('file', '/home/{{ user }}/.ssh/id_rsa.pub') }}"
   register: key
 
-- name: Messages
+- name: Display the id_rsa.pub public key 
   debug:
     var: key["key"].split()[1]
  

@@ -1,0 +1,54 @@
+- name: test yum install
+  hosts: all
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+  vars:
+    - k8s_version: "1.22.2"                                # Kubernetes version to be installed, kubernetes-cni-1.2.0-0.x86_64 is dependent and is installed with them automatical
+  tasks:
+          # - name: set Fact try
+          #debug: 
+          #var: ansible_facts
+
+    - name: Pull container images
+      shell: |
+        kubeadm config images pull
+      args:
+        chdir: $HOME
+      when:  ansible_facts['hostname'] == "centos-s-1vcpu-512mb-10gb-fra1-Master"
+
+    - name: init API or controller
+      shell: kubeadm init --apiserver-advertise-address 10.114.0.2 --pod-network-cidr=172.16.0.0/16
+      args:
+        chdir: $HOME
+        creates: cluster_initialized.txt
+      when:  ansible_facts['hostname'] == "centos-s-1vcpu-512mb-10gb-fra1-Master"
+
+    - name: create .kube directory
+      become_user: menek
+      file:
+        path: $HOME/.kube
+        state: directory
+        mode: 0755
+      when:  ansible_facts['hostname'] == "centos-s-1vcpu-512mb-10gb-fra1-Master"
+    
+    - name: copies admin.conf to user's kube config
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: $HOME/.kube/config
+      when:  ansible_facts['hostname'] == "centos-s-1vcpu-512mb-10gb-fra1-Master"
+ 
+
+    - name: copy custom calico settings from jumpserver and run it on master node
+      copy: src=/home/menek/.ansible/TESTS/roles/test_bootstrap/tasks/custom-resources.yaml dest=/root/custom-resources.yaml mode=0777
+      when: ansible_facts['hostname'] == "centos-s-1vcpu-512mb-10gb-fra1-Master"
+
+    - name: setup calico for network config
+      become: false
+      shell: |
+        kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/tigera-operator.yaml
+        #kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/custom-resources.yaml
+        kubectl apply -f /root/custom-resources.yaml
+      when:  ansible_facts['hostname'] == "centos-s-1vcpu-512mb-10gb-fra1-Master"
+        #when: '"Master" in hostname'
+
