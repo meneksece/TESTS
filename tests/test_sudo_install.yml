@@ -1,0 +1,13 @@
+- name: test yum install
+  hosts: kub-servers
+  #become: yes
+  remote_user: menek
+  #become_method: sudo
+  gather_facts: yes
+
+  tasks:
+    - name: "install httpd"
+      become: True
+      package:
+        name: httpd
+        state: absent

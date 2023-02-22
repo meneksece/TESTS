@@ -1,0 +1,86 @@
+- name: test_prep calisiyor
+  hosts: all
+  become: True
+  remote_user: menek
+  gather_facts: yes
+  vars:
+    - user: vio
+  vars_prompt:
+    - name: "user_password"
+      prompt: "Enter password for the user {{ user }}"
+      encrypt: "md5_crypt" #need to have python-passlib installed in local machine before we can use it
+      confirm: yes
+      salt_size: 7
+    - name: "ssh_passphrase"
+      prompt: "Enter the passphrase for the SSH key"
+  tasks:
+    - name: Create a remote sudo user ["{{ user }}"] for CentOS
+      ansible.builtin.user:
+        name: "{{ user }}"
+        password: "{{ user_password }}"
+        shell: /bin/bash
+        #uid: 1000
+        groups:
+          - wheel
+        state: present
+        createhome: yes
+        home: /home/{{ user }}
+        state: present
+      when: ansible_facts['distribution'] == "CentOS"
+
+    - name: Create a remote sudo user ["{{ user }}"] for Ubuntu
+      ansible.builtin.user:
+        name: "{{ user }}"
+        #    comment: "{{ password }}"
+        password: "{{ user_password }}"
+        shell: /bin/bash
+        #uid: 1000
+        groups:
+          - sudo
+        createhome: yes
+        home: /home/{{ user }}
+        state: present
+      when: ansible_facts['distribution'] == "Ubuntu" 
+
+    - name: Add a line to a file if the file does not exist, without passing regexp
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers.d/{{ user }}
+        line: '"{{ user }}" ALL=(ALL) NOPASSWD:ALL'
+        create: yes
+    
+    - name: generate SSH key
+      ansible.builtin.user:
+        name: "{{ user }}"
+        generate_ssh_key: yes
+        ssh_key_type: rsa
+        ssh_key_bits: 2048
+        ssh_key_file: /home/{{ user }}/.ssh/id_rsa
+        ssh_key_passphrase: "{{ ssh_passphrase }}"
+        force: no
+       
+    - name: Create .ssh directory --> ["/home/{{ user }}/.ssh/"]
+      file:
+        path: /home/{{ user }}/.ssh/
+        state: directory
+        mode: 0700
+    
+    - name: create empty file for authorized_keys --> ["/home/{{ user }}/.ssh/authorized_keys"]
+      file:
+        path: "/home/{{ user }}/.ssh/authorized_keys"
+        state: touch
+
+    
+    - name: Deploy SSH-Keys to remote host
+      become: True
+      authorized_key:
+        user: vio
+        state: present
+        #key: "{{ ssh_key.stdout }}"
+        key: "{{lookup('file','/home/{{ user }}/.ssh/id_rsa.pub')}}"
+        #exclusive: true
+      register: key_vio
+    
+    - name:
+      debug:
+        var: key_vio
+

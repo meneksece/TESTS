@@ -2,26 +2,43 @@
   file:
     path: /home/{{ user }}/.ssh/
     state: directory
+    mode: 0700
+
 - name: create empty file for authorized_keys --> ["/home/{{ user }}/.ssh/authorized_keys"]
   file:
     path: "/home/{{ user }}/.ssh/authorized_keys"
     state: touch
 
-- name: Put authorized key (id_rsa.pub) taken from jumpserver 
+- name: fetch the key
+  shell: cat /home/vio/.ssh/id_rsa.pub
+  register: ssh_key
+  #when: ansible_facts['hostname'] == "ubuntu-s-1vcpu-512mb-10gb-sfo3-01"
+
+- name: show the fetched key
+  debug:
+    var: ssh_key.stdout
+
+
+- name: Deploy SSH-Keys to remote host
+  become: True
   authorized_key:
     user: vio
     state: present
-    #    name: putkey
-    key: "{{ lookup('file', '/home/{{ user }}/.ssh/id_rsa.pub') }}"
-  register: key
+    #key: "{{ ssh_key.stdout }}"
+    key: "{{lookup('file','/home/{{ user }}/.ssh/id_rsa.pub')}}"
+    #exclusive: true
+  register: key_vio
 
-- name: Display the id_rsa.pub public key 
+- name:
   debug:
-    var: key["key"].split()[1]
- 
-    #- name: put pubkey
-    # lineinfile:
-    #    path: "/home/{{ user }}/.ssh/authorized_keys"
-    #    line: "{{ key }}"
+    var: key_vio
+   
+    #- name: Put authorized key (id_rsa.pub) taken from jumpserver 
+    #become: true
+    #authorized_key:
+    #user: "{{ user }}"
+    #state: present
+    #    name: putkey
+    #key: "{{ lookup('file', '/home/{{ user }}/.ssh/id_rsa.pub') }}"
+    #register: key
 
-    #ansible localhost -m authorized_key -a "user=menek key='{{ lookup('file', '/root/.ssh/id_rsa.pub') }}' state=present" -u root -k

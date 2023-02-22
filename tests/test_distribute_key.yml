@@ -1,0 +1,25 @@
+- name: test yum install
+  hosts: all
+  remote_user: menek
+  become: true
+  gather_facts: yes
+  vars:
+    - k8s_version: "1.22.2" # Kubernetes version to be installed, kubernetes-cni-1.2.0-0.x86_64 is dependent and is installed with them automatical
+  tasks:
+    - name: read the key
+      shell: cat /home/vio/.ssh/id_rsa.pub
+      register: key_vio
+    - name: see the key2 
+      debug: 
+        var: key2
+
+    - name: Put authorized key (id_rsa.pub) taken from jumpserver
+      authorized_key:
+        user: vio
+        state: present
+        #    name: putkey
+        key: "{{ lookup('file', '/home/vio/.ssh/id_rsa.pub') }}"
+      register: key
+    - name: See the key
+      debug:
+        var: key

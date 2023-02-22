@@ -1,0 +1,20 @@
+- name: test yum install
+  hosts: all
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+  vars:
+    - k8s_version: "1.22.2"                                # Kubernetes version to be installed, kubernetes-cni-1.2.0-0.x86_64 is dependent and is installed with them automatical
+  tasks:
+          # - name: set Fact try
+          #debug:
+          #var: ansible_facts
+
+    - name: create .kube directory
+      become_user: menek
+      file:
+        path: $HOME/.kube
+        state: directory
+        mode: 0755
+      when:  ansible_facts['hostname'] == "centos-s-1vcpu-512mb-10gb-fra1-Master"
+

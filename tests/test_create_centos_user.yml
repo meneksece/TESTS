@@ -1,0 +1,35 @@
+- name: test yum install
+  hosts: kub-servers[0]
+  become: yes
+  #become_user: menek
+  #become_method: sudo
+  gather_facts: yes
+  vars:
+    - k8s_version: "1.22.2"  # Kubernetes version to be installed, kubernetes-cni-1.2.0-0.x86_64 is dependent and is installed with them automatical
+      #tasks:
+          # - name: set Fact try
+          #debug:
+          #var: ansible_facts
+  vars_prompt:
+   - name: "user_password"
+     prompt: "Enter a password for the user"
+     private: yes
+     encrypt: "md5_crypt" #need to have python-passlib installed in local machine before we can use it
+     confirm: yes
+     salt_size: 7
+
+  tasks:
+   - name: "add new user" 
+     user: 
+       name: vio
+       #comment: "{{description_user}}" 
+       password: "{{user_password}}" 
+       home: "{{home_dir}}"
+       shell: "/bin/bash"
+       groups:
+         - wheel
+       state: present
+       createhome: yes
+       home: /home/vio
+       state: present
+

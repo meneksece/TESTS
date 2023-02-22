@@ -1,7 +1,8 @@
 - name: Create a remote sudo user ["{{ user }}"] for Ubuntu
   ansible.builtin.user:
     name: "{{ user }}"
-    comment: "{{ password }}"
+    #    comment: "{{ password }}"
+    password: "{{ user_password }}"
     shell: /bin/bash
     #uid: 1000
     groups:
@@ -9,3 +10,10 @@
     createhome: yes
     home: /home/{{ user }}
     state: present
+
+- name: Add a line to a file if the file does not exist, without passing regexp
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/{{ user }}
+    line: '"{{ user }}" ALL=(ALL) NOPASSWD:ALL'
+    create: yes
+
