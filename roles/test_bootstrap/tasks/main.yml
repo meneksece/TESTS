@@ -52,11 +52,13 @@
  
 - name: Include task to setup network config
   include: setup_calico.yml
-  when: '"master" in ansible_hostname'
+  when: "'master' in hostvars[inventory_hostname]['deployment_role']"
   #when: ansible_facts['hostname'] == "centos-s-1vcpu-512mb-10gb-fra1-Master"
   tags:
     - setup_calico
 
 - name: initialize kubeadm
   include: kubeadm_init.yml
-  when: '"master" in ansible_hostname'
+  when: "'master' in hostvars[inventory_hostname]['deployment_role']"
+
+

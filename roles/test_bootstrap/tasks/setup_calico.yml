@@ -1,6 +1,12 @@
 ---
 - name: copy custom calico settings from jumpserver and run it on master node
-  copy: src=/home/menek/.ansible/TESTS/roles/test_bootstrap/tasks/custom-resources.yaml dest=/root/custom-resources.yaml mode=0777
+  #copy: src=/home/menek/.ansible/TESTS/roles/test_bootstrap/tasks/custom-resources.yaml dest=/root/custom-resources.yaml mode=0777
+  ansible.builtin.template:
+    src: 'custom-resources.j2'
+    dest: /root/custom-resources.yaml
+    mode: '0777'
+  
+
 
 - name: setup calico for network config
   become: false
