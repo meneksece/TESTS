@@ -5,7 +5,7 @@
   tags:
    - configure_kubernetes
 
-- name: Synchronize time manually
+- name: Apply changes
   ansible.builtin.shell: sudo sysctl --system
   tags:
    - configure_kubernetes
