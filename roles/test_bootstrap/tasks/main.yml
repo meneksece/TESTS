@@ -56,3 +56,7 @@
   #when: ansible_facts['hostname'] == "centos-s-1vcpu-512mb-10gb-fra1-Master"
   tags:
     - setup_calico
+
+- name: initialize kubeadm
+  include: kubeadm_init.yml
+  when: '"master" in ansible_hostname'
