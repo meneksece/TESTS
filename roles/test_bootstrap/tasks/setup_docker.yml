@@ -25,6 +25,7 @@
   ansible.builtin.template:
     src: daemon.json.j2
     dest: /etc/docker/daemon.json
+  when: setup_proxy
 
 - name: Start and enable docker service
   ansible.builtin.systemd:
