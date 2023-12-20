@@ -1,22 +1,23 @@
 #localhost-py3 ansible_host=localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python3
 
 [kub-servers]
-kub-master ansible_host=centos-s-1vcpu-512mb-10gb-fra1-master
-kub-worker1 ansible_host=centos-s-1vcpu-512mb-10gb-fra1-worker-01
-kub-worker2 ansible_host=centos-s-1vcpu-512mb-10gb-fra1-worker-02
+kub-master ansible_host=172.19.252.176 deployment_role=kub-servers-master-first
+kub-worker1 ansible_host=172.19.250.253 deployment_role=kub-servers-worker-second
+kub-worker2 ansible_host=172.19.253.129 deployment_role=kub-servers-worker-third
 
 [kub-servers:vars]
 ansible_python_interpreter=/usr/bin/python2.7
 
 [master]
-kub-master ansible_host=centos-s-1vcpu-512mb-10gb-fra1-master
+kub-master ansible_host=172.19.252.176 deployment_role=kub-servers-master-first
 
 [master:vars]
 ansible_python_interpreter=/usr/bin/python2.7
 
 
 [jumpserver]
-ansible-server ansible_host=ubuntu-s-1vcpu-512mb-10gb-sfo3-01
+jump-server ansible_host=172.19.240.8 deployment_role=dummy_role_1
+
 
 [jumpserver:vars]
 ansible_python_interpreter=/usr/bin/python3

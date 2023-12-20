@@ -1,0 +1,16 @@
+- hosts: all
+  vars:
+    - user: vio
+  tasks:
+    - name: Print a message
+      ansible.builtin.debug:
+        msg: "before we run our role"
+
+    - name: Include the create_user role
+      include_role:
+        name: create_user
+      when: "ansible_facts['distribution'] == 'CentOS'"
+
+    - name: Print a message
+      ansible.builtin.debug:
+        msg: "after we ran our role"
