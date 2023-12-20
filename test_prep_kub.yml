@@ -27,5 +27,5 @@
       prompt: "Enter the passphrase for the SSH key"
   roles:
           #- role: '/home/menek/.ansible/TESTS/roles/create_user/'
-          #- roles/create_user
+    - roles/create_user
     - roles/test_bootstrap
