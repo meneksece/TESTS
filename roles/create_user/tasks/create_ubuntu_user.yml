@@ -1,8 +1,8 @@
 - name: Create a remote sudo user ["{{ user }}"] for Ubuntu
   ansible.builtin.user:
     name: "{{ user }}"
-    #    comment: "{{ password }}"
-    password: "{{ user_password }}"
+    # comment: "{{ password }}"
+    # password: "{{ user_password }}"
     shell: /bin/bash
     #uid: 1000
     groups:
