@@ -14,6 +14,8 @@
     name: "{{ item }}"
   loop:
     - "{{ basic_packages }}"
+  tags:
+    - install_basic_packages
   
 - name: Disable firewalld service
   ansible.builtin.service:
