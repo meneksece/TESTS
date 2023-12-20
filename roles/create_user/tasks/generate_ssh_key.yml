@@ -6,5 +6,6 @@
     ssh_key_type: rsa
     ssh_key_bits: 2048
     ssh_key_file: /home/{{ user }}/.ssh/id_rsa
-    ssh_key_passphrase: "{{ ssh_passphrase }}"
+    #ssh_key_passphrase: "{{ ssh_passphrase }}"
+    ssh_key_passphrase: ""
     force: no
