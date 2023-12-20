@@ -4,8 +4,8 @@
   become_method: sudo
   gather_facts: yes
   vars:
-    - user: menek
-    - password: menek
+    - user: vio
+    #- password: menek
   vars_prompt:
     - name: "ssh_passphrase"
       prompt: "Enter the passphrase for the SSH key"
