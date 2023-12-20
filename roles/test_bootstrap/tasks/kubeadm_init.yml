@@ -3,19 +3,25 @@
 - name: Pull container images
   shell: |
     kubeadm config images pull
-    kubeadm init --apiserver-advertise-address 10.114.0.2 --pod-network-cidr=172.16.0.0/16
+    kubeadm init --apiserver-advertise-address 172.19.252.176 --pod-network-cidr=172.16.0.0/16  --upload-certs  --control-plane-endpoint=172.19.252.176
   args:
     chdir: $HOME
     creates: cluster_initialized.txt
+  tags:
+    - kubeadm_init_first
 
 - name: create .kube directory
-  become_user: menek
+  become_user: "{ { user } }"
   file:
     path: $HOME/.kube
     state: directory
     mode: 0755
+  tags:
+    - create_kub_dir
 
 - name: copies admin.conf to user's kube config
   copy:
     src: /etc/kubernetes/admin.conf
     dest: $HOME/.kube/config
+  tags:
+    - copy_adminconf
