@@ -4,3 +4,8 @@
     dest: /etc/sysctl.d/kubernetes.conf
   tags:
    - configure_kubernetes
+
+- name: Synchronize time manually
+  ansible.builtin.shell: sudo sysctl --system
+  tags:
+   - configure_kubernetes
