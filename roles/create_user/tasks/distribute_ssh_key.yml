@@ -29,7 +29,7 @@
     #exclusive: true
   register: key_vio
 
-- name:
+- name: Debug key_vio
   debug:
     var: key_vio
    
