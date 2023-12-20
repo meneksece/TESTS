@@ -26,6 +26,7 @@
 - name: setup calico for network config, use templates, websites don't work any longer
   become: false
   shell: |
-    # kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/tigera-operator.yaml
+    #kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/tigera-operator.yaml
     #kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/custom-resources.yaml
+    kubectl create -f /root/tigera-operator.yaml
     kubectl create -f /root/custom-resources.yaml
