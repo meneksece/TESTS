@@ -37,7 +37,12 @@
 - name: Include task to install  k8s packages
   include: install_k8s_packages.yml
   tags:
-    - install_k8s_packages 
+    - install_k8s_packages
+    
+- name: Include task to configure  "/etc/sysctl.d/kubernetes.conf" file
+  include: configure_kubernetes.yml
+  tags:
+    - configure_kubernetes
 
 - name: Include task to configure firewalld
   include: configure_firewalld.yml
