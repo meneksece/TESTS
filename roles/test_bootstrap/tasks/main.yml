@@ -34,12 +34,18 @@
 
 - name: Include task to install  k8s packages
   include: install_k8s_packages.yml
+  tags:
+    - install_k8s_packages 
 
 - name: Include task to configure firewalld
   include: configure_firewalld.yml
   when: configure_firewalld
+  tags:
+    - configure_firewalld
  
 - name: Include task to setup network config
   include: setup_calico.yml
-  when: '"Master" in hostname'
+  when: '"master" in ansible_hostname'
   #when: ansible_facts['hostname'] == "centos-s-1vcpu-512mb-10gb-fra1-Master"
+  tags:
+    - setup_calico
