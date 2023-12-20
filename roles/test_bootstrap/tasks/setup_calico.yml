@@ -1,4 +1,13 @@
 ---
+- name: download and install latest stable release of Tigera Calico operator
+  ansible.builtin.shell: |
+    VER=$(curl -s https://api.github.com/repos/projectcalico/calico/releases/latest|grep tag_name|cut -d '"' -f 4)
+    wget https://raw.githubusercontent.com/projectcalico/calico/${VER}/manifests/tigera-operator.yaml
+    kubectl create -f tigera-operator.yaml
+  tags:
+    - download_calico
+    
+
 - name: copy custom calico settings from jumpserver and run it on master node
   #copy: src=/home/menek/.ansible/TESTS/roles/test_bootstrap/tasks/custom-resources.yaml dest=/root/custom-resources.yaml mode=0777
   ansible.builtin.template:
@@ -11,6 +20,7 @@
 - name: setup calico for network config
   become: false
   shell: |
+    
     kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/tigera-operator.yaml
     #kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/custom-resources.yaml
     kubectl create -f /root/custom-resources.yaml
