@@ -1,0 +1,6 @@
+- name: Create the .conf file to load the modules at bootup
+  ansible.builtin.template:
+    src: kubernetes.conf.j2
+    dest: /etc/sysctl.d/kubernetes.conf
+  tags:
+   - configure_kubernetes
