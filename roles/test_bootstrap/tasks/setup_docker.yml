@@ -3,11 +3,15 @@
   get_url:
     url: https://download.docker.com/linux/centos/docker-ce.repo
     dest: /etc/yum.repos.d/docer-ce.repo
+  tags:
+    - add_docker_repo
 
 - name: Install supported version of docker
   ansible.builtin.package:
     name: [docker-ce]
     state: present
+  tags:
+    - install_docker
 
 - name: Create other directories required
   ansible.builtin.file:
@@ -28,6 +32,8 @@
     state: started
     enabled: yes
     daemon_reload: yes
+  tags:
+    - start_docker_svc
 
 - name: Setup Docker Proxy
   ansible.builtin.template:
