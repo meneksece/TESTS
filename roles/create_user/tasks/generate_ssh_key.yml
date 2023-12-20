@@ -9,3 +9,5 @@
     #ssh_key_passphrase: "{{ ssh_passphrase }}"
     ssh_key_passphrase: ""
     force: no
+  tags:
+    - generate_key
